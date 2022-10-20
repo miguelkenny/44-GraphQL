@@ -128,3 +128,18 @@ export const updateProduct = {
         return updatedProduct
     }
 }
+
+export const deleteProduct = {
+    type: GraphQLString,
+    description: "Delete a product",
+    args: {
+        id: { type: GraphQLID }
+    },
+    async resolve(_, { id }) {
+        const productDeleted = await Product.findOneAndDelete({ _id: id })
+        
+        if(!productDeleted) throw new Error ("Product " + id + " not found")
+        
+        return "Product Deleted"
+    }
+}
