@@ -1,4 +1,4 @@
-import pkg, {GraphQLList} from 'graphql'
+import pkg, { GraphQLList, GraphQLID } from 'graphql'
 import CryptoJS from 'crypto-js'
 import User from '../../models/User.js'
 import Product from '../../models/Product.js'
@@ -87,5 +87,44 @@ export const createProduct = {
         await newProduct.save()
 
         return newProduct
+    }
+}
+
+export const updateProduct = {
+    type: ProductType,
+    description: "Update a product",
+    args: {
+        id: { type: GraphQLID },
+        title: { type: GraphQLString },
+        desc: { type: GraphQLString },
+        img: { type: GraphQLString },
+        categories: { type: new GraphQLList(GraphQLString) },
+        size: { type: new GraphQLList(GraphQLString) },
+        color: { type: new GraphQLList(GraphQLString) },
+        price: { type: GraphQLString },
+        inStock: { type: GraphQLString }
+    },
+    async resolve(_, args) {
+        const updatedProduct = await Product.findByIdAndUpdate(
+            {
+                _id: args.id
+            },
+            {
+                title: args.title,
+                desc: args.desc,
+                img: args.img,
+                categories: args.categories,
+                size: args.size,
+                color: args.color,
+                price: args.price,
+                inStock: args.inStock,
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        )
+
+        return updatedProduct
     }
 }
