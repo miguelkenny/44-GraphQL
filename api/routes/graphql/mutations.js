@@ -1,4 +1,4 @@
-import pkg from 'graphql'
+import pkg, {GraphQLList} from 'graphql'
 import CryptoJS from 'crypto-js'
 import User from '../../models/User.js'
 import Product from '../../models/Product.js'
@@ -8,7 +8,7 @@ import { ProductType } from './type.js'
 
 config()
 
-const { GraphQLString, GraphQLList } = pkg
+const { GraphQLString } = pkg
 
 export const register = {
     type: GraphQLString,
@@ -76,14 +76,14 @@ export const createProduct = {
         desc: { type: GraphQLString },
         img: { type: GraphQLString },
         categories: { type: new GraphQLList(GraphQLString) },
-        size: { type: GraphQLString },
-        color: { type: GraphQLString },
+        size: { type: new GraphQLList(GraphQLString) },
+        color: { type: new GraphQLList(GraphQLString) },
         price: { type: GraphQLString },
         inStock: { type: GraphQLString },
     },
     async resolve(_, args) {
         const newProduct = new Product(args)
-        
+
         await newProduct.save()
 
         return newProduct
