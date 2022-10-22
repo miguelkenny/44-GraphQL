@@ -3,12 +3,6 @@ import { graphqlHTTP } from 'express-graphql'
 import schema from './routes/graphql/schema.js'
 import mongoose from 'mongoose'
 import {config} from 'dotenv'
-import routes from './routes/user.js'
-import authRoutes from './routes/auth.js'
-import productsRoutes from './routes/products.js'
-import cartRoutes from './routes/cart.js'
-import orderRoutes from './routes/order.js'
-import stripeRoutes from './routes/stripe.js'
 import cors from 'cors'
 
 import path from 'path';
@@ -38,13 +32,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }))
 
-app.use('/api/auth', authRoutes)
-app.use('/api/users', routes)
-app.use('/api/products', productsRoutes)
-app.use('/api/carts', cartRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/checkout', stripeRoutes)
-
-app.listen(process.env.PORT || 5000, () => {
-    console.log('Backend server listening on port 5000');
+const server = app.listen(process.env.PORT || 5000, () => {
+    console.log('Backend server listening on port: ', `http://localhost:${server.address().port}/graphql`);
 });
